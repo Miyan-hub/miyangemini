@@ -1,7 +1,7 @@
-FROM python:3.10.14
+FROM python:3
 
 COPY . .
 
 RUN pip install -r requirements.txt
 
-ENTTRYPOINT [ "python", "app.py" ]
+ENTTRYPOINT [ "python", "test.py" ]
