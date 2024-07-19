@@ -1,33 +1,24 @@
-"""
-Install the Google AI Python SDK
+from flask import *
 
-$ pip install google-generativeai
-
-See the getting started guide for more information:
-https://ai.google.dev/gemini-api/docs/get-started/python
-"""
-
-import os
+import os, requests
 
 import google.generativeai as genai
 
+app = Flask(__name__)
+
 genai.configure(api_key="AIzaSyBYO8bvnvgPQ3w4hYS2C4xFOpS2-sBDT94")
 
-# Create the model
-# See https://ai.google.dev/api/python/google/generativeai/GenerativeModel
 generation_config = {
   "temperature": 1,
-  "top_p": 0.95,
+  "top_p": 1,
   "top_k": 64,
   "max_output_tokens": 8192,
-  "response_mime_type": "text/plain",
+  "response_mime_type": "text/plain"
 }
 
 model = genai.GenerativeModel(
   model_name="gemini-1.5-pro",
-  generation_config=generation_config,
-  # safety_settings = Adjust safety settings
-  # See https://ai.google.dev/gemini-api/docs/safety-settings
+  generation_config=generation_config
 )
 
 chat_session = model.start_chat(
@@ -35,6 +26,16 @@ chat_session = model.start_chat(
   ]
 )
 
-response = chat_session.send_message("Halo gemini apa kabar?")
+@app.route("/")
+def gemini():
+    try:
+        text = request.args.get('')
+        if text == '':
+            return "Please Fill With Text..."
+        response = chat_session.send_message(text)
+        return response.text, 200
+    except:
+        return "Error"
 
-print(response.text)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80)
