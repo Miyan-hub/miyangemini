@@ -1,15 +1,18 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI("AIzaSyBYO8bvnvgPQ3w4hYS2C4xFOpS2-sBDT94");
+// Access your API key as an environment variable (see "Set up your API key" above)
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-const prompt = "Halo Apa Kabar?";
-// const image = {
-  // inlineData: {
-    // data: Buffer.from(fs.readFileSync("cookie.png")).toString("base64"),
-    // mimeType: "image/png",
-  // },
-// };
+async function run() {
+  // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
 
-const result = await model.generateContent([prompt]);
-console.log(result.response.text())
+  const prompt = "Write a story about a magic backpack."
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+}
+
+run();
