@@ -1,9 +1,7 @@
-FROM python:3.10
+FROM node:lts-buster
 
 COPY . .
 
-RUN echo tes
+RUN npm install requests flask @google/generative-ai
 
-RUN pip install -r requirements.txt
-
-ENTTRYPOINT [ "python", "test.py" ]
+ENTTRYPOINT [ "node", "app.js" ]
